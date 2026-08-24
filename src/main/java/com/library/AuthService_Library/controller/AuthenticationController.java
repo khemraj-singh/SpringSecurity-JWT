@@ -26,6 +26,7 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
+
         
         // 1. Verify credentials using standard Spring Security core systems
         Authentication authentication = authenticationManager.authenticate(
@@ -43,6 +44,12 @@ public class AuthenticationController {
 
         // 4. Dispatch the string back to the user client
         return ResponseEntity.ok(new JwtResponse(jwtToken));
+    }
+
+
+    @GetMapping
+    public ResponseEntity<?> testEndpoint() {
+        return ResponseEntity.ok("Authentication service is running.");
     }
 }
 

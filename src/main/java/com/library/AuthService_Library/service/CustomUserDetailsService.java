@@ -30,7 +30,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         // 2. Convert raw roles into Spring Security GrantedAuthority instances
         List<SimpleGrantedAuthority> authorities = userEntity.getRoles().stream()
-                .map(SimpleGrantedAuthority::new)
+            .map(role -> new SimpleGrantedAuthority(role.getName()))
                 .collect(Collectors.toList());
 
         // 3. Construct and return Spring's immutable default UserDetails object

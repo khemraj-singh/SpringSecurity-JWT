@@ -4,7 +4,6 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpHeaders;
 import org.springframework.lang.NonNull;
@@ -32,13 +31,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtTokenUtil jwtTokenUtil;
     private final UserDetailsService userDetailsService;
 
-    @Qualifier("handlerExceptionResolver")
-    private final HandlerExceptionResolver resolver;
+    /*
+        @Qualifier(value="handlerExceptionResolver")
+    private final  HandlerExceptionResolver resolver;
 
     public JwtAuthenticationFilter(JwtTokenUtil jwtTokenUtil, UserDetailsService userDetailsService, HandlerExceptionResolver resolver) {
         this.jwtTokenUtil = jwtTokenUtil;
         this.userDetailsService = userDetailsService;
         this.resolver = resolver;
+    }
+    */
+
+    public JwtAuthenticationFilter(JwtTokenUtil jwtTokenUtil, UserDetailsService userDetailsService) {
+        this.jwtTokenUtil = jwtTokenUtil;
+        this.userDetailsService = userDetailsService;
     }
 
     @Override
@@ -78,7 +84,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             logger.error("Cannot set user authentication: {}", ex);
             
             // Forward the exception directly to your RestControllerAdvice
-            resolver.resolveException(request, response, null, ex);
+        //    resolver.resolveException(request, response, null, ex);
         }
 
         // Forward execution to the remaining filters in the pipeline

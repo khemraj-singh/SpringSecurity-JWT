@@ -1,5 +1,6 @@
 package com.library.AuthService_Library.util;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,7 +14,7 @@ import java.util.Date;
 public class JwtTokenUtil {
 
     @Value("${jwt.secret}")
-    private String secretKeyString;
+    private String secretKeyString; // Must be at least 256 bits (32 bytes) long base64 encoded string
 
     private SecretKey getSigningKey() {
         return Keys.hmacShaKeyFor(secretKeyString.getBytes(StandardCharsets.UTF_8));
@@ -21,7 +22,7 @@ public class JwtTokenUtil {
 
     // 1. Manually Generate and Sign Token
     public String generateToken(String username) {
-        long expirationTimeInMs = 3600000; // 1 Hour
+        long expirationTimeInMs = 3600000; // 1 hour in milliseconds
         return Jwts.builder()
                 .subject(username)
                 .issuedAt(new Date())
@@ -38,5 +39,14 @@ public class JwtTokenUtil {
                 .parseSignedClaims(token)
                 .getPayload()
                 .getSubject();
+    }
+    
+    // 3. Extract all claims from the token
+    public Claims extractAllClaims(String token) {
+        return Jwts.parser()
+                .verifyWith(getSigningKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
     }
 }

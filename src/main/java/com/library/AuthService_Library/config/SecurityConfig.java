@@ -22,11 +22,11 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .csrf(csrf -> csrf.disable()) // Disabled for stateless APIs
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) //No State Saved
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/auth/login").permitAll() // Authentication endpoint
                 .requestMatchers("/swagger-ui.html", "/v3/api-docs/**", "/swagger-ui/**").permitAll() // Swagger endpoints  
-                .anyRequest().authenticated()
+                .anyRequest().authenticated() // Secure everything else
             );
 
         // Crucial Step: Add your manual interceptor ahead of standard validation layers
